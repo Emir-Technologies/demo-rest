@@ -21,12 +21,13 @@ public class Cliente implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
-	
+	@Column(nullable=false)
 	private String name;
 	
 	@Column(name="last_name")
 	private  String lastName;
 	
+	@Column(nullable=false, unique=true) //Adding the constrains for get a unique email and don't let save it in blank
 	private String email;
 	
 	@Column(name="create_at")
