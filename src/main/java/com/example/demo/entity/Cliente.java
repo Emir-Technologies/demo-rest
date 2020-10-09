@@ -12,6 +12,9 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="clientes")
@@ -21,12 +24,18 @@ public class Cliente implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
+	
+	@NotEmpty
+	@Size(min=4, max=25)
 	@Column(nullable=false)
 	private String name;
 	
+	@NotEmpty
 	@Column(name="last_name")
 	private  String lastName;
 	
+	@NotEmpty
+	@Email
 	@Column(nullable=false, unique=true) //Adding the constrains for get a unique email and don't let save it in blank
 	private String email;
 	

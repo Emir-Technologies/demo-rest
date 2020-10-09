@@ -141,7 +141,7 @@ public class ClienteRestController {
 		try {
 			clienteService.Delete(id);
 		}catch(DataAccessException e){
-			response.put("mensaje", "Error al actualizar el Cliente en el servidor");
+			response.put("mensaje", "Error al Eliminar el Cliente en el servidor");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
