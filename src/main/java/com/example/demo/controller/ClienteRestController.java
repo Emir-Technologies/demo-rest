@@ -1,13 +1,19 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,7 +74,7 @@ public class ClienteRestController {
 	}
 	
 	@PostMapping("/clientes")
-	public ResponseEntity<?> create(@RequestBody Cliente cliente) {
+	public ResponseEntity<?> create(@Valid @RequestBody Cliente cliente, BindingResult result) {
 		/*
 		 * On this method was added constrains in the entity to be more realistic
 		 * to the real database flow
@@ -76,6 +82,32 @@ public class ClienteRestController {
 		
 		Cliente clienteNew =null;
 		Map<String, Object> response = new HashMap<>();
+		
+	
+		/**Block to validate the Json recieved from angular with the rules on the Entity **/
+		
+		if(result.hasErrors()) { //check if there is errors on the binding result
+			
+			/**First way to get the errors**/
+			/*List<String> errors = new 	ArrayList<>();
+			
+			for (FieldError err: result.getFieldErrors()){
+				errors.add("El campo '" +  err.getField() + "'  "+ err.getDefaultMessage());
+			}*/
+			/**End of first way**/
+			
+			/**Second way that come after java 8**/
+			
+			List<String> errors = result.getFieldErrors()
+					.stream()
+					.map(err -> "El campo '" +  err.getField() + "'  "+ err.getDefaultMessage())
+					.collect(Collectors.toList());
+			 
+			/**End second way	**/
+			response.put("errors ", errors);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+		}
+		/**End of block to validate*/
 		
 
 		try {
