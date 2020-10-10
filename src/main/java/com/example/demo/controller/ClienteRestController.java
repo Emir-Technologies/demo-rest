@@ -125,8 +125,8 @@ public class ClienteRestController {
 	}
 
 	
-	@PutMapping("/clientes/{id}")
-	public ResponseEntity<?> update(@RequestBody Cliente cliente, @PathVariable Long id) {
+	@PutMapping("/clientes/{id}")//The @Valid has to be before the @Request. BindingResult must to be after it but before any variable
+	public ResponseEntity<?> update(@Valid @RequestBody Cliente cliente , BindingResult result, @PathVariable Long id) {
 		/*
 		 * For this method is a combination between the get and create
 		 * first the validation of finding the Cliente and the right updating
@@ -135,15 +135,28 @@ public class ClienteRestController {
 		Cliente clienteUpdated =null;
 		Map<String, Object> response = new HashMap<>();
 		
+		/**Start of block for Valid errors**/
+		if(result.hasErrors()) { 
+			List<String> errors = result.getFieldErrors()
+					.stream()
+					.map(err -> "El campo '" +  err.getField() + "'  "+ err.getDefaultMessage())
+					.collect(Collectors.toList());
+			
+			response.put("errors ", errors);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+		}	
+		/**End of block for Valid errors**/	
 		
 		Cliente clienteActual = clienteService.findById(id);
 		
+		/**Start Validation of object found**/
 		if(clienteActual == null) {
 			response.put("mensaje", "Error: no se pudo editar el cliente con el ID 	: ".concat(id.toString().concat(" No existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-		
 		}
-
+		/**End Validation of object found**/
+		
+		/**Start of Block for apply the update or catch the error**/
 		try {
 			clienteActual.setName(cliente.getName());
 			clienteActual.setLastName(cliente.getLastName());
@@ -154,8 +167,8 @@ public class ClienteRestController {
 			response.put("mensaje", "Error al actualizar el Cliente en el servidor");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		
 		}
+		/**End of block**/
 		
 		response.put("mensaje", "Cliente ha sido Actualizado con éxito");
 		response.put("cliente", clienteUpdated);
