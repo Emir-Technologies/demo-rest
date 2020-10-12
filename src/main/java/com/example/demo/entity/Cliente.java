@@ -36,7 +36,7 @@ public class Cliente implements Serializable{
 	
 	@NotEmpty(message="Debe ingresar un correo")
 	@Email(message="El correo debe tener un formato correcto")
-	@Column(nullable=false, unique=true) //Adding the constrains for get a unique email and don't let save it in blank
+	@Column(nullable=false, unique=false) //Adding the constrains for get a unique email and don't let save it in blank
 	private String email;
 	
 	@Column(name="create_at")
