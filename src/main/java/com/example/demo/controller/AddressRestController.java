@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,6 +53,26 @@ public class AddressRestController {
 		return new ResponseEntity<Address>(address, HttpStatus.OK);
 	}
 
-
+	
+	@PostMapping("/address")
+	public ResponseEntity<?> create(@RequestBody Address address){
+		
+		Address newAddress = null;
+		Map<String, Object> response = new HashMap<>();
+		
+		try {
+			newAddress = addressService.save(address);
+		}catch(DataAccessException e) {
+			response.put("mensaje", "Error al registrar en el servidor");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		response.put("mesage", "Cliente registrado con éxito");
+		response.put("address", newAddress);
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+	}
+	
 
 }

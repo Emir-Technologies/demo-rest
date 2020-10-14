@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -48,6 +50,10 @@ public class Cliente implements Serializable{
 		createAt = new Date();
 	}
 
+	@OneToOne
+	private Address address;
+	
+	
 	public long getId() {
 		return id;
 	}
@@ -102,6 +108,14 @@ public class Cliente implements Serializable{
 	}
 
 	public Cliente() {
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 	
 	

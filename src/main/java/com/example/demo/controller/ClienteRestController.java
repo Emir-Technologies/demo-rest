@@ -28,7 +28,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.entity.Address;
 import com.example.demo.entity.Cliente;
+import com.example.demo.services.IAddressService;
 import com.example.demo.services.IClienteService;
 
 @CrossOrigin(origins= {"http://localhost:4200"})
@@ -38,6 +40,9 @@ public class ClienteRestController {
 
 	@Autowired
 	private IClienteService clienteService;
+	
+	@Autowired
+	private IAddressService addressService;
 	
 	@GetMapping("/clientes")
 	public List<Cliente> index(){
@@ -88,9 +93,11 @@ public class ClienteRestController {
 		 * On this method was added constrains in the entity to be more realistic
 		 * to the real database flow
 		 */
-		
+		Address address = null;
 		Cliente clienteNew =null;
 		Map<String, Object> response = new HashMap<>();
+		
+		
 		
 	
 		/**Block to validate the Json recieved from angular with the rules on the Entity **/
@@ -118,13 +125,25 @@ public class ClienteRestController {
 		}
 		/**End of block to validate*/
 		
-
+		if(cliente.getAddress()!=null) {
+			try {
+			address = addressService.save(cliente.getAddress());
+			clienteNew = clienteService.save(cliente);
+			}catch(DataAccessException e) {
+				response.put("mensaje", "Error al registrar en el servidor");
+				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}else {
+		
 		try {
 			clienteNew = clienteService.save(cliente);
 		}catch(DataAccessException e) {
 			response.put("mensaje", "Error al registrar en el servidor");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 		}
 		
 		response.put("mensaje", "Cliente registrado con éxito");
