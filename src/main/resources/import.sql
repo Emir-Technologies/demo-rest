@@ -14,4 +14,7 @@ INSERT INTO clientes (name, last_name, email, create_at, address_id) VALUES('Gen
 INSERT INTO clientes (name, last_name, email, create_at, address_id) VALUES('Marce', 'Rocha', 'Rocha@hotmail.com', '2015-03-03', 6); 
 INSERT INTO clientes (name, last_name, email, create_at, address_id) VALUES('Lore', 'Sotelo', 'Sotelo@hotmail.com', '2015-03-03', 7); 
 INSERT INTO clientes (name, last_name, email, create_at, address_id) VALUES('Reyna', 'Mozo', 'Mozo@hotmail.com', '2015-03-03', 8);
-
+INSERT INTO address (number, street, city, country) VALUES('21', 'Tocatlan', 'Tlaxcala', 'Mexico');
+INSERT INTO visitas (address_id, cliente_id, date) VALUES (9, 2, '2015-03-03');
+INSERT INTO visitas (address_id, cliente_id, date) VALUES (3, 2, '2015-04-22');
+INSERT INTO visitas (address_id, cliente_id, date) VALUES (7, 2, '2015-05-21');
