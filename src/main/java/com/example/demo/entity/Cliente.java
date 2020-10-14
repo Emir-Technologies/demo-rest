@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -50,7 +51,7 @@ public class Cliente implements Serializable{
 		createAt = new Date();
 	}
 
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	private Address address;
 	
 	
