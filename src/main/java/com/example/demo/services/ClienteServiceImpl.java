@@ -47,4 +47,10 @@ public class ClienteServiceImpl implements IClienteService{
 		return clienteDao.findAll(page);
 	}
 
+	@Override
+	@Transactional
+	public Cliente findByaddress_id(Long addressId) {
+		return clienteDao.findByaddress_id(addressId);
+	}
+
 }

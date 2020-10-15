@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.entity.Address;
 import com.example.demo.entity.Cliente;
 import com.example.demo.services.IAddressService;
+import com.example.demo.services.IClienteService;
 
 @CrossOrigin(origins= {"http://localhost:4200"})
 @RestController
@@ -33,6 +34,9 @@ public class AddressRestController {
 
 	@Autowired
 	private IAddressService addressService;
+	
+	@Autowired
+	private IClienteService clienteService;
 	
 	@GetMapping("/address")
 	public List<Address> index(){
@@ -136,15 +140,57 @@ public class AddressRestController {
 	public ResponseEntity<?> delete(@PathVariable Long id){
 		Map<String, Object> response = new HashMap<>();
 		
+		Cliente actualCliente = clienteService.findByaddress_id(id);
+		
+		if(actualCliente==null) {
+			
+	
 		try {
 			addressService.Delete(id);
+		
+			response.put("mensaje", "La dirección ha sido eliminada con exito");
 		}catch(DataAccessException e){
 			response.put("mensaje", "Error al Eliminar el address en el servidor");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		response.put("mensaje", "El cliente ha sido eliminado con exito");
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK); 
+		}else {
+			
+			try {
+				
+				
+				//clienteService.Delete(actualCliente.getId());
+				
+				
+				actualCliente.setAddress(null);
+				clienteService.save(actualCliente);
+				
+				//addressService.Delete(id);
+				
+				response.put("mensaje", "La direccion ha sido eliminada con exito");
+
+			/*	try {
+					addressService.Delete(id);	
+					response.put("mensaje", "La direccion ha sido eliminada con exito");
+
+				}catch(DataAccessException e){
+					response.put("mensaje", "Error al Eliminar el address en el servidor");
+					response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+*/
+			}catch(DataAccessException e){
+				response.put("mensaje", "Error al Eliminar el address en el servidor");
+				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			
+			
+		
+		}
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+		
 	}
 	
 	

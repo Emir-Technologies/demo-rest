@@ -11,6 +11,7 @@ public interface IClienteService {
 	public List<Cliente> findAll();
 	public Cliente findById(Long id);
 	public Cliente save(Cliente cliente);
-	public void 	Delete(Long id);
+	public void Delete(Long id);
 	public Page<Cliente> findAll(Pageable page);
+	public Cliente findByaddress_id(Long addressId);
 }

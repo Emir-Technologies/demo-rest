@@ -6,4 +6,5 @@ import com.example.demo.entity.Cliente;
 
 public interface IClientesDao extends JpaRepository<Cliente, Long>{
 
+	public Cliente findByaddress_id(Long addressId);
 }

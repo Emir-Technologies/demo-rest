@@ -87,6 +87,31 @@ public class ClienteRestController {
 		return new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
 	}
 	
+	@GetMapping("/clientes/address/{id}")
+	public ResponseEntity<?> showByAddress(@PathVariable Long id) {
+
+		Cliente cliente =null;
+		Map<String, Object> response = new HashMap<>();
+		
+	try {
+			cliente = clienteService.findByaddress_id(id);
+		}catch(DataAccessException e) {
+			response.put("mensaje", "Error al realizar la consulta del cliente por direccion");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		//Finally will make a confirmation about the content on the object cliente
+		if(cliente==null) {
+			response.put("mensaje", "El cliente ID: ".concat(id.toString().concat(" No existe en la base de datos!")));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		//Each return give the content: message or object and the respective status
+		return new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
+	}
+	
+	
+	
 	@PostMapping("/clientes")
 	public ResponseEntity<?> create(@Valid @RequestBody Cliente cliente, BindingResult result) {
 		/*
