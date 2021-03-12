@@ -20,7 +20,7 @@ INSERT INTO visitas (address_id, cliente_id, date) VALUES (3, 2, '2015-04-22');
 INSERT INTO visitas (address_id, cliente_id, date) VALUES (7, 2, '2015-05-21');
 INSERT INTO users (username, password, enabled) values ('Emir', '$2a$10$TKJ/QyxXfbRCqh/ZMvdkS.cRkr5mC5PB26KEI3F30OCc20.oVxDD.', true);
 INSERT INTO users (username, password, enabled) values ('Luis', '$2a$10$m.ZAq01k0pnWLHccpK8XDebzEORbuTl.sT9u4pz.xJikrfDqzyoZy', true);
-INSERT INTO role (name) values ('ROLE_USE');
+INSERT INTO role (name) values ('ROLE_USER');
 INSERT INTO role (name) values ('ROLE_ADMIN');
 INSERT INTO usuarios_roles (users_id, roles_id) values (1,1);
 INSERT INTO usuarios_roles (users_id, roles_id) values (1,2);
